@@ -1,15 +1,33 @@
-document.onkeydown = function(){
+var check = (function () {
+    var callbacks = [], timeLimit = 2, open = false;
+    setInterval(loop, 2);
+    return {
+        addListener: function (fn) {
+            callbacks.push(fn);
+        },
+        cancleListenr: function (fn) {
+            callbacks = callbacks.filter(function (v) {
+                return v !== fn;
+            });
+        }
+    }
+    function loop() {
+        var startTime = new Date();
+        debugger;
 
-  if(window.event && window.event.keyCode == 123) {
-    window.location="about:blank"; //将当前窗口跳转置空白页
-    event.keyCode=0;
-    event.returnValue=false;
-  }
-  if(window.event && window.event.keyCode == 13) {
-    window.event.keyCode = 505;
-  }
-  if(window.event && window.event.keyCode == 8) {
-    alert(str+"n请使用Del键进行字符的删除操作！");
-    window.event.returnValue=false;
-  }
-}
+        if (new Date() - startTime > timeLimit) {
+            if (!open) {
+                callbacks.forEach(function (fn) {
+                    fn.call(null);
+                });
+            }
+            open = true;
+        } else {
+            open = false;
+        }
+    }
+})();
+
+check.addListener(function () {
+    //alert('Open Devtool');
+});
