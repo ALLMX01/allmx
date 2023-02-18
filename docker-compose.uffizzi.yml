@@ -1,0 +1,20 @@
+x-uffizzi:
+  ingress:
+    service: alist
+    port: 5244
+services:
+    alist:
+        restart: always
+        volumes:
+            - alist:/opt/alist/data
+        ports:
+            - '5244:5244'
+        environment:
+            - PUID=0
+            - PGID=0
+            - UMASK=022
+        container_name: alist
+        image: 'xhofe/alist-aria2:latest'
+        
+volumes:
+  alist:
